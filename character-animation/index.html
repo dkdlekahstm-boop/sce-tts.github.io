@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>2D 캐릭터 애니메이션 - SCE-TTS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="걷기, 달리기, 점프, 손 흔들기 동작을 CSS로 표현한 2D 캐릭터 애니메이션 데모" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top-bar">
+    <h1>🚶 2D 캐릭터 애니메이션</h1>
+    <p class="subtitle">동작과 속도, 색상을 골라서 2D 캐릭터가 걷고 달리고 점프하고 손 흔드는 모습을 확인해보세요.</p>
+    <a class="back-link" href="/">← SCE-TTS 홈으로</a>
+  </header>
+
+  <main class="layout">
+    <section class="panel stage-panel">
+      <div class="stage" id="stage" data-action="walk">
+        <div class="sky"></div>
+        <div class="ground"></div>
+        <div class="shadow" id="shadow"></div>
+        <div class="character-position">
+          <div class="character-figure" id="figure">
+            <div class="arm arm-left" id="armLeft"><span class="hand"></span></div>
+            <div class="arm arm-right" id="armRight"><span class="hand"></span></div>
+            <div class="torso"></div>
+            <div class="head"><span class="face"></span></div>
+            <div class="leg leg-left" id="legLeft"><span class="foot"></span></div>
+            <div class="leg leg-right" id="legRight"><span class="foot"></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel controls-panel">
+      <h2>컨트롤</h2>
+
+      <label>동작
+        <select id="action-select">
+          <option value="walk" selected>걷기</option>
+          <option value="run">달리기</option>
+          <option value="jump">점프</option>
+          <option value="wave">손 흔들기</option>
+          <option value="idle">가만히 있기</option>
+        </select>
+      </label>
+
+      <label>속도 <span id="speed-value">1.0x</span>
+        <input type="range" id="speed-range" min="0.5" max="2" step="0.1" value="1" />
+      </label>
+
+      <label>캐릭터 옷 색상
+        <input type="color" id="color-picker" value="#4c9c2c" />
+      </label>
+
+      <button id="toggle-play" class="primary-btn">⏸ 일시정지</button>
+
+      <p class="hint">
+        모든 동작은 SVG나 이미지 없이 CSS <code>@keyframes</code> 회전/이동만으로 만들어졌습니다.
+        속도 슬라이더는 애니메이션 지속시간(<code>--dur</code>)을 바꿔서 재생 속도를 조절합니다.
+      </p>
+    </section>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
