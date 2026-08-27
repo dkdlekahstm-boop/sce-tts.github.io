@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>나의 공부 루틴 - SCE-TTS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="내 일정과 공부 스타일에 맞춘 하루 공부 루틴을 뇌과학 기반으로 자동으로 짜주는 앱" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top-bar">
+    <h1>🧠 나만의 공부 루틴</h1>
+    <p class="subtitle">내 일정 · 내 과목 · 내가 미루는 이유를 반영해서, 뇌과학 근거로 하루 루틴을 자동으로 짜드려요.</p>
+    <a class="back-link" href="/">← SCE-TTS 홈으로</a>
+  </header>
+
+  <nav class="tab-bar" id="tab-bar" hidden>
+    <button class="tab-btn active" data-tab="today">오늘의 루틴</button>
+    <button class="tab-btn" data-tab="review">복습 퀘스트</button>
+    <button class="tab-btn" data-tab="research">연구 근거</button>
+    <button class="tab-btn" data-tab="settings">설정</button>
+  </nav>
+
+  <main>
+    <!-- 온보딩 -->
+    <section id="onboarding" class="panel onboarding">
+      <h2>1분만 답해주세요 — 딱 맞는 루틴을 짜드릴게요</h2>
+
+      <form id="onboarding-form">
+        <fieldset>
+          <legend>기본 생활 패턴</legend>
+          <label>부르는 이름
+            <input type="text" id="f-name" placeholder="예: 주호" />
+          </label>
+          <div class="row">
+            <label>기상 시간
+              <input type="time" id="f-wake" value="07:00" required />
+            </label>
+            <label>취침 시간
+              <input type="time" id="f-sleep" value="23:30" required />
+            </label>
+          </div>
+          <label>나는 어떤 타입인 것 같나요?
+            <select id="f-chronotype">
+              <option value="morning">아침에 머리가 더 잘 돌아간다</option>
+              <option value="evening">저녁/밤에 집중이 더 잘 된다</option>
+              <option value="unsure" selected>잘 모르겠다</option>
+            </select>
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>과목 &amp; 약점</legend>
+          <p class="hint">과목마다 "얼마나 약한지"를 표시해주세요. 약할수록 루틴 앞쪽/좋은 시간대에 더 자주 배치돼요.</p>
+          <div id="subjects-list"></div>
+          <button type="button" id="add-subject-btn" class="secondary-btn">+ 과목 추가</button>
+        </fieldset>
+
+        <fieldset>
+          <legend>고정 일정 (학교/학원/식사 등)</legend>
+          <div class="row">
+            <span class="fixed-group-label">평일</span>
+            <button type="button" class="secondary-btn small" data-add-fixed="weekday">+ 평일 일정 추가</button>
+          </div>
+          <div id="fixed-weekday-list"></div>
+          <div class="row">
+            <span class="fixed-group-label">주말</span>
+            <button type="button" class="secondary-btn small" data-add-fixed="weekend">+ 주말 일정 추가</button>
+          </div>
+          <div id="fixed-weekend-list"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>집중 스타일</legend>
+          <label>한 세션 길이 (몰입 지속 시간)
+            <select id="f-focus-unit">
+              <option value="20">20분 — 짧게 자주 (미루기가 심할 때 추천)</option>
+              <option value="25" selected>25분 — 표준 뽀모도로</option>
+              <option value="40">40분 — 길게 몰입 (집중이 잘 되는 편일 때)</option>
+            </select>
+          </label>
+          <label>하루 총 공부 목표 시간(분)
+            <input type="number" id="f-goal-minutes" value="90" min="20" step="10" />
+          </label>
+          <label>주로 공부하는 장소
+            <input type="text" id="f-place" value="내 방 책상" />
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>나를 미루게 만드는 것 (여러 개 선택 가능)</legend>
+          <div class="checkbox-grid" id="triggers-grid"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>동기부여 보상</legend>
+          <p class="hint">오늘의 루틴을 다 끝내면 나에게 줄 작은 보상을 정해두면 실행력이 훨씬 올라가요 (템테이션 번들링).</p>
+          <label>오늘의 보상
+            <input type="text" id="f-reward" placeholder="예: 좋아하는 영상 15분 보기, 간식 먹기" />
+          </label>
+        </fieldset>
+
+        <button type="submit" class="primary-btn big">✨ 내 루틴 만들기</button>
+      </form>
+    </section>
+
+    <!-- 오늘의 루틴 -->
+    <section id="tab-today" class="panel tab-panel" hidden>
+      <div class="progress-card">
+        <div class="progress-stats">
+          <div><span id="stat-level">Lv.1</span><small>레벨</small></div>
+          <div><span id="stat-xp">0 XP</span><small>총 경험치</small></div>
+          <div><span id="stat-streak">0일</span><small>연속 학습</small></div>
+        </div>
+        <div class="xp-bar"><div class="xp-bar-fill" id="xp-bar-fill"></div></div>
+        <p class="encourage" id="encourage-msg"></p>
+        <div class="badge-row" id="badge-row"></div>
+      </div>
+
+      <div class="reward-card" id="reward-card"></div>
+
+      <h2 id="today-date-label"></h2>
+      <div id="today-sessions"></div>
+
+      <div class="tip-card" id="trigger-tip-card"></div>
+    </section>
+
+    <!-- 복습 퀘스트 -->
+    <section id="tab-review" class="panel tab-panel" hidden>
+      <h2>📚 오늘 복습할 것</h2>
+      <p class="hint">간격 반복 원리: 배운 직후보다, 살짝 잊혀질 때쯤 다시 떠올리는 게 가장 오래 남습니다.</p>
+      <div id="review-due-list"></div>
+
+      <h3>오늘 새로 배운 개념 등록</h3>
+      <form id="topic-form" class="row">
+        <select id="topic-subject"></select>
+        <input type="text" id="topic-name" placeholder="예: 높임법, 이차방정식 근의 공식" required />
+        <button type="submit" class="secondary-btn">추가</button>
+      </form>
+
+      <h3>전체 복습 목록</h3>
+      <div id="topic-all-list"></div>
+    </section>
+
+    <!-- 연구 근거 -->
+    <section id="tab-research" class="panel tab-panel" hidden>
+      <h2>🔬 이 앱이 근거로 삼은 뇌과학·행동과학 원리</h2>
+      <p class="hint">각 원리가 실제로 루틴의 어느 부분에 적용됐는지 함께 적어뒀어요.</p>
+      <div id="research-list"></div>
+    </section>
+
+    <!-- 설정 -->
+    <section id="tab-settings" class="panel tab-panel" hidden>
+      <h2>⚙️ 설정</h2>
+      <button id="redo-onboarding-btn" class="secondary-btn">내 정보 다시 입력하기</button>
+      <div class="settings-block">
+        <h3>데이터 백업</h3>
+        <p class="hint">이 앱의 데이터는 이 브라우저에만 저장돼요(서버 없음). 다른 기기로 옮기고 싶다면 내보내기/불러오기를 사용하세요.</p>
+        <button id="export-btn" class="secondary-btn">내보내기 (JSON 다운로드)</button>
+        <label class="import-label">불러오기
+          <input type="file" id="import-file" accept="application/json" />
+        </label>
+      </div>
+      <div class="settings-block">
+        <h3>초기화</h3>
+        <button id="reset-btn" class="danger-btn">모든 데이터 초기화</button>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
