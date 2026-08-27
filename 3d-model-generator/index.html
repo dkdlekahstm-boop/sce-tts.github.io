@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>부품별 3D 모델 생성기 - SCE-TTS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="부품별로 계획을 세우고, 사진이나 설명으로 3D 모델을 만들어 3D 프린터용 ZIP으로 내보내는 도구" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top-bar">
+    <h1>🧩 부품별 3D 모델 생성기</h1>
+    <p class="subtitle">부품을 하나씩 기획하고, 사진이 있으면 사진을 참고해서, 없으면 설명한 대로 3D 모델을 만듭니다.
+      완성되면 프린터 설정과 함께 ZIP으로 내려받으세요.</p>
+    <a class="back-link" href="/">← SCE-TTS 홈으로</a>
+  </header>
+
+  <main class="layout">
+    <section class="panel parts-panel">
+      <div class="panel-header">
+        <h2>1. 부품별 기획</h2>
+        <button id="add-part-btn" class="primary-btn">+ 부품 추가</button>
+      </div>
+
+      <div class="ai-key-box">
+        <label for="ai-api-key">Meshy AI API 키 (선택사항)</label>
+        <input type="password" id="ai-api-key" placeholder="사진/설명으로 실제 AI 3D 생성을 원하면 입력 (없어도 기본 모델링은 동작)" />
+        <p class="hint">
+          입력한 키는 이 브라우저에만 저장되고 Meshy 서버로만 전송됩니다. 키가 없으면 아래 도형 조합 방식(파라메트릭)으로만 모델을 만듭니다.
+          AI 생성은 외부 서비스 상태에 따라 실패할 수 있습니다.
+        </p>
+      </div>
+
+      <div id="parts-list"></div>
+    </section>
+
+    <section class="panel preview-panel">
+      <h2>2. 조립 미리보기</h2>
+      <div id="viewer"></div>
+      <p class="hint">회색 격자 한 칸 = 10mm. 마우스 드래그로 회전, 휠로 확대/축소.</p>
+    </section>
+
+    <section class="panel settings-panel">
+      <h2>3. 3D 프린터 설정</h2>
+      <label for="material-select">필라멘트 재질</label>
+      <select id="material-select"></select>
+
+      <div class="settings-grid">
+        <label>노즐 온도(°C) <input type="number" id="set-nozzle" /></label>
+        <label>베드 온도(°C) <input type="number" id="set-bed" /></label>
+        <label>냉각팬(%) <input type="number" id="set-fan" min="0" max="100" /></label>
+        <label>출력 속도(mm/s) <input type="number" id="set-speed" /></label>
+        <label>리트랙션 거리(mm) <input type="number" id="set-retract-dist" step="0.1" /></label>
+        <label>리트랙션 속도(mm/s) <input type="number" id="set-retract-speed" /></label>
+        <label>필라멘트 지름(mm)
+          <select id="set-diameter"></select>
+        </label>
+        <label>레이어 높이(mm) <input type="number" id="set-layer" step="0.02" value="0.2" /></label>
+        <label>인필(%) <input type="number" id="set-infill" min="0" max="100" value="20" /></label>
+      </div>
+      <div id="material-note" class="hint"></div>
+      <div id="drying-note" class="warn-box" hidden></div>
+
+      <button id="export-btn" class="primary-btn big">📦 ZIP으로 내보내기</button>
+      <div id="export-status" class="hint"></div>
+    </section>
+
+    <section class="panel precaution-panel">
+      <h2>4. 출력 시 주의사항</h2>
+      <div id="precaution-content"></div>
+    </section>
+  </main>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three/build/three.module.js",
+      "three/addons/": "./vendor/three/jsm/"
+    }
+  }
+  </script>
+  <script src="./vendor/jszip/jszip.min.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
