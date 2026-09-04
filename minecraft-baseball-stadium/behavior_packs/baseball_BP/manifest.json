@@ -4,21 +4,21 @@
     "name": "SCE Baseball Stadium - Behavior Pack",
     "description": "9이닝 자동 진행 야구 경기 시스템 (투구/타격/수비/주루/규칙 엔진)",
     "uuid": "e691a4a3-01e8-4365-84a9-1eea5ee2abad",
-    "version": [1, 0, 0],
+    "version": [1, 0, 2],
     "min_engine_version": [1, 21, 0]
   },
   "modules": [
     {
       "type": "data",
       "uuid": "e05c6f6b-d220-43d6-96f6-37b9d87682fc",
-      "version": [1, 0, 0]
+      "version": [1, 0, 2]
     },
     {
       "type": "script",
       "language": "javascript",
       "uuid": "bafaf2f6-7ef3-42e5-b8f3-5287fcc195f0",
       "entry": "scripts/main.js",
-      "version": [1, 0, 0]
+      "version": [1, 0, 2]
     }
   ],
   "dependencies": [
@@ -32,7 +32,7 @@
     },
     {
       "uuid": "4025fb7d-74ae-448e-a860-42d50168f941",
-      "version": [1, 0, 0]
+      "version": [1, 0, 2]
     }
   ]
 }
