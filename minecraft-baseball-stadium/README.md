@@ -91,7 +91,7 @@ minecraft-baseball-stadium/
 | 8. 포수 시스템 | `gameManager.js`(포수 배치), `baserunning.js`(도루 판정) — 사인 연출은 단순화됨(DESIGN.md 3장) |
 | 9. 전광판 | `scoreboard.js` |
 | 10. 관중/응원 | `crowd.js` |
-| 11. 경기 시작 시스템(로비→인원→팀→시작) | `gameManager.js` |
+| 11. 경기 시작 시스템(로비→인원→팀→시작) | `gameManager.js` — 접속 즉시 1인 플레이로 자동 시작되며, 로비 NPC로 먼저 인원/팀을 고르면 그 설정이 우선한다 |
 | 12. 경기 연출(자막) | `ui.js`(title), `rules.js`/`fielding.js` 호출부 |
 | 13. 카메라 | `camera.js`, `cameras/camera_presets.json` |
 | 14. 모바일 최적화 | `docs/DESIGN.md` 2장 하단 설명, `crowd.js`(관중 수 제한), `stadiumBuilder.js`(runJob 분산 생성) |

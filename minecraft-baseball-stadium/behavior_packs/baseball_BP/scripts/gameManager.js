@@ -231,6 +231,30 @@ function afterAnyPlay(dimension, inningOver) {
   system.runTimeout(() => nextBatter(dimension), 30);
 }
 
+/**
+ * 로비 NPC 상호작용 없이, 월드에 들어오면 바로 경기가 시작되도록 하는 자동 시작.
+ * 이미 접속해 있는 플레이어가 있으면(경기장 생성을 기다리던 그 플레이어) 그 사람을
+ * 홈팀 타자/투수로 자동 배정해 1인 플레이로 즉시 시작한다. 이후 새로 들어오는
+ * 플레이어를 위해 playerSpawn 이벤트도 함께 구독해둔다(같은 로직 재사용).
+ * 로비 NPC(우클릭으로 인원/팀을 직접 고르는 방식)는 그대로 남겨뒀으니, 자동 시작 전에
+ * NPC로 먼저 2인/3인 플레이를 설정해두면 그 설정이 우선한다.
+ */
+function autoStartSolo(player, dimension) {
+  if (state.phase !== PHASE.LOBBY) return;
+  if (lobby.numHumans !== null) return; // 이미 누군가 로비 NPC로 인원을 설정한 경우 존중
+  lobby.numHumans = 1;
+  state.humans.home.batterPitcher = player;
+  lobby.joined.push({ player, team: "home", role: "batterPitcher" });
+  actionBar(player, "§a혼자 플레이 - 홈팀으로 자동 시작!");
+  startGame(dimension);
+}
+
+function tryAutoStart(dimension) {
+  const players = world.getAllPlayers();
+  if (players.length === 0) return;
+  system.runTimeout(() => autoStartSolo(players[0], dimension), 40);
+}
+
 // ---------------------------------------------------------------- init
 export function init(dimension) {
   initScoreboard();
@@ -243,6 +267,11 @@ export function init(dimension) {
     handleLobbyJoin(ev.player, dimension);
   });
 
+  world.afterEvents.playerSpawn.subscribe((ev) => {
+    if (!ev.initialSpawn) return;
+    system.runTimeout(() => autoStartSolo(ev.player, dimension), 40);
+  });
+
   onAfterPlay(({ inningOver }) => afterAnyPlay(dimension, inningOver));
 
   onAfterAtBat(({ reason, inningOver }) => {
@@ -252,4 +281,6 @@ export function init(dimension) {
     }
     afterAnyPlay(dimension, inningOver);
   });
+
+  tryAutoStart(dimension); // 경기장 생성을 기다리던 플레이어가 이미 접속해 있는 경우
 }
