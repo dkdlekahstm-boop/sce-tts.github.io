@@ -1,0 +1,104 @@
+{
+  "format_version": "1.20.0",
+  "minecraft:entity": {
+    "description": {
+      "identifier": "sce:player_npc",
+      "is_spawnable": false,
+      "is_summonable": true,
+      "is_experimental": false,
+      "properties": {
+        "sce:team": { "type": "int", "range": [0, 1], "default": 0, "client_sync": true },
+        "sce:role": {
+          "type": "enum",
+          "values": ["idle", "fielder", "runner", "batter", "pitcher"],
+          "default": "idle",
+          "client_sync": true
+        }
+      }
+    },
+    "component_groups": {
+      "sce:group_fielder": {
+        "minecraft:behavior.nearest_attackable_target": {
+          "priority": 1,
+          "must_see": false,
+          "reselect_targets": true,
+          "within_radius": 96,
+          "entity_types": [
+            {
+              "filters": { "test": "is_family", "subject": "other", "value": "sce_ball_marker" },
+              "max_dist": 96
+            }
+          ]
+        },
+        "minecraft:behavior.melee_attack": {
+          "priority": 2,
+          "speed_multiplier": 1.15,
+          "track_target": true,
+          "reach_multiplier": 1.2,
+          "attack_once": false
+        }
+      },
+      "sce:group_runner": {
+        "minecraft:behavior.nearest_attackable_target": {
+          "priority": 1,
+          "must_see": false,
+          "reselect_targets": true,
+          "within_radius": 64,
+          "entity_types": [
+            {
+              "filters": { "test": "is_family", "subject": "other", "value": "sce_base_marker" },
+              "max_dist": 64
+            }
+          ]
+        },
+        "minecraft:behavior.melee_attack": {
+          "priority": 2,
+          "speed_multiplier": 1.3,
+          "track_target": true,
+          "reach_multiplier": 1.2,
+          "attack_once": false
+        }
+      },
+      "sce:group_idle": {}
+    },
+    "components": {
+      "minecraft:type_family": { "family": ["sce_player_npc", "mob"] },
+      "minecraft:collision_box": { "width": 0.6, "height": 1.8 },
+      "minecraft:health": { "value": 40, "max": 40 },
+      "minecraft:movement": { "value": 0.28 },
+      "minecraft:movement.basic": {},
+      "minecraft:navigation.walk": {
+        "can_path_over_water": false,
+        "avoid_water": true,
+        "avoid_damage_blocks": true
+      },
+      "minecraft:jump.static": {},
+      "minecraft:physics": {},
+      "minecraft:pushable": { "is_pushable": false, "is_pushable_by_piston": false },
+      "minecraft:knockback_resistance": { "value": 1 },
+      "minecraft:damage_sensor": { "triggers": [ { "cause": "all", "deals_damage": false } ] },
+      "minecraft:persistent": {},
+      "minecraft:behavior.look_at_player": { "priority": 6, "look_distance": 8, "probability": 0.02 },
+      "minecraft:behavior.random_look_around": { "priority": 7 }
+    },
+    "events": {
+      "sce:become_fielder": {
+        "remove": { "component_groups": ["sce:group_runner", "sce:group_idle"] },
+        "add": { "component_groups": ["sce:group_fielder"] },
+        "set_property": { "sce:role": "fielder" }
+      },
+      "sce:become_runner": {
+        "remove": { "component_groups": ["sce:group_fielder", "sce:group_idle"] },
+        "add": { "component_groups": ["sce:group_runner"] },
+        "set_property": { "sce:role": "runner" }
+      },
+      "sce:become_idle": {
+        "remove": { "component_groups": ["sce:group_fielder", "sce:group_runner"] },
+        "add": { "component_groups": ["sce:group_idle"] },
+        "set_property": { "sce:role": "idle" }
+      },
+      "sce:set_team_home": { "set_property": { "sce:team": 0 } },
+      "sce:set_team_away": { "set_property": { "sce:team": 1 } }
+    }
+  }
+}

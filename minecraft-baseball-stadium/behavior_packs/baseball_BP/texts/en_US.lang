@@ -1,0 +1,5 @@
+pack.name=SCE Baseball Stadium (BP)
+pack.description=9-inning auto-playing baseball stadium
+
+item.sce_baseball_bat.name=Baseball Bat
+item.sce_pitch_selector.name=Pitch Caller

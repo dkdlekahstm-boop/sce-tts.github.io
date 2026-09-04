@@ -1,0 +1,18 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "sce:player_npc",
+      "materials": { "default": "entity_alphatest" },
+      "textures": {
+        "array.skins": ["textures/entity/player_home", "textures/entity/player_away"]
+      },
+      "geometry": { "default": "geometry.humanoid.custom" },
+      "scripts": {
+        "animate": ["walk"]
+      },
+      "animations": { "walk": "animation.sce_player_npc.walk" },
+      "render_controllers": ["controller.render.sce_player_npc"]
+    }
+  }
+}

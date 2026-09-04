@@ -1,0 +1,23 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "SCE Baseball Stadium - Resource Pack",
+    "description": "야구공/선수 NPC 모델, 텍스처, 사운드",
+    "uuid": "4025fb7d-74ae-448e-a860-42d50168f941",
+    "version": [1, 0, 0],
+    "min_engine_version": [1, 21, 0]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "b2dea567-d885-4a38-8c75-733682f0621d",
+      "version": [1, 0, 0]
+    }
+  ],
+  "dependencies": [
+    {
+      "uuid": "e691a4a3-01e8-4365-84a9-1eea5ee2abad",
+      "version": [1, 0, 0]
+    }
+  ]
+}

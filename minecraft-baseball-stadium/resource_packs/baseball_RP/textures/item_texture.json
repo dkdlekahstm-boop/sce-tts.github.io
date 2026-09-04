@@ -1,0 +1,8 @@
+{
+  "resource_pack_name": "baseball_RP",
+  "texture_name": "atlas.items",
+  "texture_data": {
+    "baseball_bat": { "textures": "textures/items/baseball_bat" },
+    "pitch_selector": { "textures": "textures/items/pitch_selector" }
+  }
+}

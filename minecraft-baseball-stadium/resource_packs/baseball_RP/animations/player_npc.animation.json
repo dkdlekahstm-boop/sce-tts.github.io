@@ -1,0 +1,22 @@
+{
+  "format_version": "1.10.0",
+  "animations": {
+    "animation.sce_player_npc.walk": {
+      "loop": true,
+      "bones": {
+        "leftLeg": {
+          "rotation": ["math.sin(query.anim_time * 380 * query.modified_move_speed) * 35 * query.modified_move_speed", 0, 0]
+        },
+        "rightLeg": {
+          "rotation": ["math.sin(query.anim_time * 380 * query.modified_move_speed + 180) * 35 * query.modified_move_speed", 0, 0]
+        },
+        "leftArm": {
+          "rotation": ["math.sin(query.anim_time * 380 * query.modified_move_speed + 180) * 30 * query.modified_move_speed", 0, 0]
+        },
+        "rightArm": {
+          "rotation": ["math.sin(query.anim_time * 380 * query.modified_move_speed) * 30 * query.modified_move_speed", 0, 0]
+        }
+      }
+    }
+  }
+}

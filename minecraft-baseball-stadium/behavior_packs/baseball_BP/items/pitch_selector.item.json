@@ -1,0 +1,12 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:item": {
+    "description": { "identifier": "sce:pitch_selector", "category": "equipment" },
+    "components": {
+      "minecraft:max_stack_size": 1,
+      "minecraft:hand_equipped": true,
+      "minecraft:icon": { "texture": "pitch_selector" },
+      "minecraft:display_name": { "value": "item.sce_pitch_selector.name" }
+    }
+  }
+}

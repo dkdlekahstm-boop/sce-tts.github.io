@@ -1,0 +1,5 @@
+pack.name=SCE 야구 경기장 (BP)
+pack.description=9이닝 자동 진행 야구 경기 시스템
+
+item.sce_baseball_bat.name=야구 방망이
+item.sce_pitch_selector.name=투구 콜러
